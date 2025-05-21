@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机视频播放器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        video {
+            width: 80%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>随机视频播放器</h1>
+    <button onclick="playRandomVideo()">播放随机视频</button>
+    <video id="videoPlayer" controls>
+        <source id="videoSource" src="" type="video/mp4">
+        您的浏览器不支持 HTML5 视频。
+    </video>
+
+    <script>
+        async function fetchVideoLinks() {
+            const response = await fetch('dyMP4.txt');
+            const text = await response.text();
+            return text.split('\n').filter(line => line.trim() !== '');
+        }
+
+        async function playRandomVideo() {
+            const videoLinks = await fetchVideoLinks();
+            const randomIndex = Math.floor(Math.random() * videoLinks.length);
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoSource = document.getElementById('videoSource');
+            
+            videoSource.src = videoLinks[randomIndex];
+            videoPlayer.load();
+            videoPlayer.play();
+        }
+    </script>
+</body>
+</html>
